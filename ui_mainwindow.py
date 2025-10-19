@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QSpacerItem, QStackedWidget, QStatusBar, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QHeaderView,
+    QLabel, QMainWindow, QMenuBar, QPushButton,
+    QSizePolicy, QSpacerItem, QStackedWidget, QStatusBar,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -291,10 +291,91 @@ class Ui_MainWindow(object):
         self.pageNotifications.setObjectName(u"pageNotifications")
         self.notifLayout = QVBoxLayout(self.pageNotifications)
         self.notifLayout.setObjectName(u"notifLayout")
-        self.labelNotif = QLabel(self.pageNotifications)
-        self.labelNotif.setObjectName(u"labelNotif")
+        self.notifHeader = QFrame(self.pageNotifications)
+        self.notifHeader.setObjectName(u"notifHeader")
+        self.notifHeader.setStyleSheet(u"\n"
+"                     QFrame {\n"
+"                       background-color: #1f2335;\n"
+"                       border-bottom: 1px solid #3b4261;\n"
+"                       border-radius: 8px;\n"
+"                       padding: 8px;\n"
+"                     }\n"
+"                     QLabel {\n"
+"                       font-size: 16px;\n"
+"                       font-weight: bold;\n"
+"                       color: #7aa2f7;\n"
+"                     }\n"
+"                   ")
+        self.notifHeaderLayout = QHBoxLayout(self.notifHeader)
+        self.notifHeaderLayout.setObjectName(u"notifHeaderLayout")
+        self.notifTitle = QLabel(self.notifHeader)
+        self.notifTitle.setObjectName(u"notifTitle")
 
-        self.notifLayout.addWidget(self.labelNotif)
+        self.notifHeaderLayout.addWidget(self.notifTitle)
+
+        self.notifHeaderSpacer = QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.notifHeaderLayout.addItem(self.notifHeaderSpacer)
+
+        self.btnExportCSV = QPushButton(self.notifHeader)
+        self.btnExportCSV.setObjectName(u"btnExportCSV")
+        self.btnExportCSV.setStyleSheet(u"\n"
+"                           QPushButton {\n"
+"                             background-color: #7aa2f7;\n"
+"                             color: white;\n"
+"                             border-radius: 6px;\n"
+"                             padding: 6px 12px;\n"
+"                           }\n"
+"                           QPushButton:hover {\n"
+"                             background-color: #89b4fa;\n"
+"                           }\n"
+"                         ")
+
+        self.notifHeaderLayout.addWidget(self.btnExportCSV)
+
+        self.btnExportPDF = QPushButton(self.notifHeader)
+        self.btnExportPDF.setObjectName(u"btnExportPDF")
+        self.btnExportPDF.setStyleSheet(u"\n"
+"                           QPushButton {\n"
+"                             background-color: #7aa2f7;\n"
+"                             color: white;\n"
+"                             border-radius: 6px;\n"
+"                             padding: 6px 12px;\n"
+"                           }\n"
+"                           QPushButton:hover {\n"
+"                             background-color: #89b4fa;\n"
+"                           }\n"
+"                         ")
+
+        self.notifHeaderLayout.addWidget(self.btnExportPDF)
+
+
+        self.notifLayout.addWidget(self.notifHeader)
+
+        self.notifTable = QTableWidget(self.pageNotifications)
+        if (self.notifTable.columnCount() < 2):
+            self.notifTable.setColumnCount(2)
+        __qtablewidgetitem = QTableWidgetItem()
+        self.notifTable.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        __qtablewidgetitem1 = QTableWidgetItem()
+        self.notifTable.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        self.notifTable.setObjectName(u"notifTable")
+        self.notifTable.setStyleSheet(u"\n"
+"                     QTableWidget {\n"
+"                       background-color: #1f2335;\n"
+"                       color: #c0caf5;\n"
+"                       border: 1px solid #3b4261;\n"
+"                     }\n"
+"                     QHeaderView::section {\n"
+"                       background-color: #414868;\n"
+"                       color: #c0caf5;\n"
+"                       font-weight: bold;\n"
+"                       padding: 6px;\n"
+"                       border: none;\n"
+"                     }\n"
+"                   ")
+
+        self.notifLayout.addWidget(self.notifTable)
 
         self.stackedWidget.addWidget(self.pageNotifications)
         self.pageNetwork = QWidget()
@@ -385,7 +466,13 @@ class Ui_MainWindow(object):
         self.labelHealthTitle.setText(QCoreApplication.translate("MainWindow", u"System Health", None))
         self.labelHealthValue.setText(QCoreApplication.translate("MainWindow", u"Good", None))
         self.chartTitle.setText(QCoreApplication.translate("MainWindow", u"Network Activity (Last 24 Hours)", None))
-        self.labelNotif.setText(QCoreApplication.translate("MainWindow", u"Notifications content goes here.", None))
+        self.notifTitle.setText(QCoreApplication.translate("MainWindow", u"Notifications", None))
+        self.btnExportCSV.setText(QCoreApplication.translate("MainWindow", u"Export CSV", None))
+        self.btnExportPDF.setText(QCoreApplication.translate("MainWindow", u"Export PDF", None))
+        ___qtablewidgetitem = self.notifTable.horizontalHeaderItem(0)
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Date", None));
+        ___qtablewidgetitem1 = self.notifTable.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Message", None));
         self.labelNetwork.setText(QCoreApplication.translate("MainWindow", u"Network Traffic Analysis content here.", None))
         self.labelControls.setText(QCoreApplication.translate("MainWindow", u"Prevention & Response content here.", None))
         self.labelRules.setText(QCoreApplication.translate("MainWindow", u"Rules Management content here.", None))

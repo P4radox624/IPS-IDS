@@ -218,7 +218,121 @@
          </widget>
 
          <!-- Other Pages -->
-         <widget class="QWidget" name="pageNotifications"><layout class="QVBoxLayout" name="notifLayout"><item><widget class="QLabel" name="labelNotif"><property name="text"><string>Notifications content goes here.</string></property></widget></item></layout></widget>
+
+         <!-- Notifications Page -->
+         <widget class="QWidget" name="pageNotifications">
+           <layout class="QVBoxLayout" name="notifLayout">
+             <!-- Header -->
+             <item>
+               <widget class="QFrame" name="notifHeader">
+                 <property name="styleSheet">
+                   <string notr="true">
+                     QFrame {
+                       background-color: #1f2335;
+                       border-bottom: 1px solid #3b4261;
+                       border-radius: 8px;
+                       padding: 8px;
+                     }
+                     QLabel {
+                       font-size: 16px;
+                       font-weight: bold;
+                       color: #7aa2f7;
+                     }
+                   </string>
+                 </property>
+                 <layout class="QHBoxLayout" name="notifHeaderLayout">
+                   <item>
+                     <widget class="QLabel" name="notifTitle">
+                       <property name="text">
+                         <string>Notifications</string>
+                       </property>
+                     </widget>
+                   </item>
+                   <item>
+                     <spacer name="notifHeaderSpacer">
+                       <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                       </property>
+                     </spacer>
+                   </item>
+                   <item>
+                     <widget class="QPushButton" name="btnExportCSV">
+                       <property name="text">
+                         <string>Export CSV</string>
+                       </property>
+                       <property name="styleSheet">
+                         <string notr="true">
+                           QPushButton {
+                             background-color: #7aa2f7;
+                             color: white;
+                             border-radius: 6px;
+                             padding: 6px 12px;
+                           }
+                           QPushButton:hover {
+                             background-color: #89b4fa;
+                           }
+                         </string>
+                       </property>
+                     </widget>
+                   </item>
+                   <item>
+                     <widget class="QPushButton" name="btnExportPDF">
+                       <property name="text">
+                         <string>Export PDF</string>
+                       </property>
+                       <property name="styleSheet">
+                         <string notr="true">
+                           QPushButton {
+                             background-color: #7aa2f7;
+                             color: white;
+                             border-radius: 6px;
+                             padding: 6px 12px;
+                           }
+                           QPushButton:hover {
+                             background-color: #89b4fa;
+                           }
+                         </string>
+                       </property>
+                     </widget>
+                   </item>
+                 </layout>
+               </widget>
+             </item>
+
+             <!-- Notifications List -->
+             <item>
+               <widget class="QTableWidget" name="notifTable">
+                 <property name="styleSheet">
+                   <string notr="true">
+                     QTableWidget {
+                       background-color: #1f2335;
+                       color: #c0caf5;
+                       border: 1px solid #3b4261;
+                     }
+                     QHeaderView::section {
+                       background-color: #414868;
+                       color: #c0caf5;
+                       font-weight: bold;
+                       padding: 6px;
+                       border: none;
+                     }
+                   </string>
+                 </property>
+                 <column>
+                   <property name="text">
+                     <string>Date</string>
+                   </property>
+                 </column>
+                 <column>
+                   <property name="text">
+                     <string>Message</string>
+                   </property>
+                 </column>
+               </widget>
+             </item>
+           </layout>
+         </widget>
+
          <widget class="QWidget" name="pageNetwork"><layout class="QVBoxLayout" name="networkLayout"><item><widget class="QLabel" name="labelNetwork"><property name="text"><string>Network Traffic Analysis content here.</string></property></widget></item></layout></widget>
          <widget class="QWidget" name="pageControls"><layout class="QVBoxLayout" name="controlsLayout"><item><widget class="QLabel" name="labelControls"><property name="text"><string>Prevention &amp; Response content here.</string></property></widget></item></layout></widget>
          <widget class="QWidget" name="pageRules"><layout class="QVBoxLayout" name="rulesLayout"><item><widget class="QLabel" name="labelRules"><property name="text"><string>Rules Management content here.</string></property></widget></item></layout></widget>

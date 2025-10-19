@@ -1,5 +1,5 @@
 import sys
-from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6.QtWidgets import QMainWindow, QApplication, QPushButton, QHBoxLayout
 from PySide6.QtCharts import QChart, QChartView, QLineSeries
 from PySide6.QtGui import QPainter
 from ui_mainwindow import Ui_MainWindow
@@ -18,7 +18,8 @@ class NewFormWindow(QMainWindow):
         self.ui.btnReports.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.pageReports))
         self.ui.btnSettings.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.pageSettings))
 
-
+        self.ui.btnExportCSV = QPushButton("Export CSV")
+        self.ui.btnExportPDF = QPushButton("Export PDF")
 
         def add_static_graph(self):
             from PySide6.QtWidgets import QVBoxLayout
@@ -51,7 +52,63 @@ class NewFormWindow(QMainWindow):
 
             layout.addWidget(chart_view)
 
+        def export_csv(self):
+                import csv
+                from PySide6.QtWidgets import QFileDialog
 
+                # Ask the user where to save the CSV
+                path, _ = QFileDialog.getSaveFileName(self, "Save CSV", "", "CSV Files (*.csv)")
+                if not path:
+                        return
+
+                # EXAMPLE DATA: get notif content
+                notifications = [
+                        {"Date": "2025-10-19", "Message": "Network stable"},
+                        {"Date": "2025-10-19", "Message": "New rule added"},
+                ]
+
+                # Write CSV
+                with open(path, "w", newline="", encoding="utf-8") as csvfile:
+                        fieldnames = notifications[0].keys()
+                        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerows(notifications)
+
+                print(f"CSV exported to: {path}")
+
+
+        # ReportLab (pip install reportlab)
+        def export_pdf(self):
+                from reportlab.lib.pagesizes import letter
+                from reportlab.pdfgen import canvas
+
+                path, _ = QFileDialog.getSaveFileName(self, "Save CSV", "", "CSV Files (*.csv)")
+                if not path:
+                        return
+
+                notifications = [
+                        {"Date": "2025-10-19", "Message": "Network stable"},
+                        {"Date": "2025-10-19", "Message": "New rule added"},
+                    ]
+
+
+                    # ''' path = "report.pdf" -->
+                    #c = canvas.Canvas(path, pagesize=letter)
+                    #c.drawString(100, 750, "Hello PDF")
+                    #c.save()
+                    #c.setFont("Helvetica", 12)
+                    #y = height - 50
+
+                    #c.drawString(50, y, "Notifications Report")
+                    #y -= 3'0
+
+                    #for notif in notifications:
+                     #   line = f"{notif['Date']} - {notif['Message']}"
+                      #  c.drawString(50, y, line)
+                       # y -= 20
+
+                    #c.save()
+                    # print(f"PDF exported to: {path}") '''
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
