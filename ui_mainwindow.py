@@ -17,7 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QSpacerItem, QStatusBar, QVBoxLayout, QWidget)
+    QSpacerItem, QStackedWidget, QStatusBar, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -43,6 +44,7 @@ class Ui_MainWindow(object):
 "         border: none;\n"
 "         font-size: 14px;\n"
 "         border-radius: 6px;\n"
+"         \n"
 "        }\n"
 "        QPushButton:hover {\n"
 "         background-color: #292e42;\n"
@@ -91,7 +93,7 @@ class Ui_MainWindow(object):
 
         self.sidebarLayout.addWidget(self.btnReports)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.sidebarLayout.addItem(self.verticalSpacer)
 
@@ -115,43 +117,37 @@ class Ui_MainWindow(object):
 "         font-size: 14px;\n"
 "        }\n"
 "        QPushButton {\n"
-"         background-color: #7aa2f7;\n"
+"         background-color: #3d59a1;\n"
 "         color: white;\n"
 "         border: none;\n"
 "         border-radius: 6px;\n"
 "         padding: 6px 12px;\n"
 "        }\n"
 "        QPushButton:hover {\n"
-"         background-color: #89b4fa;\n"
-"        }\n"
-"        QHeaderView::section {\n"
-"         background-color: #414868;\n"
-"         color: #c0caf5;\n"
-"         font-weight: bold;\n"
-"         padding: 6px;\n"
-"         border: none;\n"
-"        }\n"
-"        QTableWidget {\n"
-"         background-color: #1f2335;\n"
-"         gridline-color: #3b4261;\n"
-"         border: 1px solid #3b4261;\n"
+"         background-color: #7aa2f7;\n"
 "        }\n"
 "       ")
         self.mainContentLayout = QVBoxLayout(self.mainContentFrame)
         self.mainContentLayout.setObjectName(u"mainContentLayout")
-        self.headerFrame = QFrame(self.mainContentFrame)
+        self.stackedWidget = QStackedWidget(self.mainContentFrame)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.pageDashboard = QWidget()
+        self.pageDashboard.setObjectName(u"pageDashboard")
+        self.dashboardLayout = QVBoxLayout(self.pageDashboard)
+        self.dashboardLayout.setObjectName(u"dashboardLayout")
+        self.headerFrame = QFrame(self.pageDashboard)
         self.headerFrame.setObjectName(u"headerFrame")
         self.headerFrame.setStyleSheet(u"\n"
-"           QFrame {\n"
-"            background-color: #1f2335;\n"
-"            border-bottom: 1px solid #3b4261;\n"
-"           }\n"
-"           QLabel {\n"
-"            font-size: 16px;\n"
-"            font-weight: bold;\n"
-"            color: #7aa2f7;\n"
-"           }\n"
-"          ")
+"               QFrame {\n"
+"                background-color: #1f2335;\n"
+"                border-bottom: 1px solid #3b4261;\n"
+"               }\n"
+"               QLabel {\n"
+"                font-size: 18px;\n"
+"                font-weight: bold;\n"
+"                color: #7aa2f7;\n"
+"               }\n"
+"              ")
         self.headerLayout = QHBoxLayout(self.headerFrame)
         self.headerLayout.setObjectName(u"headerLayout")
         self.headerTitle = QLabel(self.headerFrame)
@@ -159,9 +155,9 @@ class Ui_MainWindow(object):
 
         self.headerLayout.addWidget(self.headerTitle)
 
-        self.horizontalSpacer = QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.headerSpacer = QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.headerLayout.addItem(self.horizontalSpacer)
+        self.headerLayout.addItem(self.headerSpacer)
 
         self.refreshButton = QPushButton(self.headerFrame)
         self.refreshButton.setObjectName(u"refreshButton")
@@ -169,77 +165,190 @@ class Ui_MainWindow(object):
         self.headerLayout.addWidget(self.refreshButton)
 
 
-        self.mainContentLayout.addWidget(self.headerFrame)
+        self.dashboardLayout.addWidget(self.headerFrame)
 
-        self.statsLayout = QHBoxLayout()
+        self.statsFrame = QFrame(self.pageDashboard)
+        self.statsFrame.setObjectName(u"statsFrame")
+        self.statsFrame.setStyleSheet(u"\n"
+"               QFrame {\n"
+"                background: transparent;\n"
+"               }\n"
+"               QLabel {\n"
+"                color: #c0caf5;\n"
+"                font-size: 13px;\n"
+"               }\n"
+"              ")
+        self.statsLayout = QHBoxLayout(self.statsFrame)
         self.statsLayout.setObjectName(u"statsLayout")
-        self.stat1 = QFrame(self.mainContentFrame)
-        self.stat1.setObjectName(u"stat1")
-        self.stat1.setStyleSheet(u"QFrame { background-color: #1f2335; border-radius: 8px; padding: 12px; }")
-        self.vboxLayout = QVBoxLayout(self.stat1)
-        self.vboxLayout.setObjectName(u"vboxLayout")
-        self.lblNetworkStatus = QLabel(self.stat1)
-        self.lblNetworkStatus.setObjectName(u"lblNetworkStatus")
+        self.cardNetwork = QFrame(self.statsFrame)
+        self.cardNetwork.setObjectName(u"cardNetwork")
+        self.cardNetwork.setStyleSheet(u"\n"
+"                  QFrame {\n"
+"                   background-color: rgba(255,255,255,0.05);\n"
+"                   border-radius: 10px;\n"
+"                   padding: 20px;\n"
+"                   border: 1px solid #3b4261;\n"
+"                  }\n"
+"                  QLabel { color: #c0caf5; font-size: 13px; }\n"
+"                 ")
+        self.networkCardLayout = QVBoxLayout(self.cardNetwork)
+        self.networkCardLayout.setObjectName(u"networkCardLayout")
+        self.labelNetworkTitle = QLabel(self.cardNetwork)
+        self.labelNetworkTitle.setObjectName(u"labelNetworkTitle")
 
-        self.vboxLayout.addWidget(self.lblNetworkStatus)
+        self.networkCardLayout.addWidget(self.labelNetworkTitle)
 
+        self.labelNetworkValue = QLabel(self.cardNetwork)
+        self.labelNetworkValue.setObjectName(u"labelNetworkValue")
 
-        self.statsLayout.addWidget(self.stat1)
-
-        self.stat2 = QFrame(self.mainContentFrame)
-        self.stat2.setObjectName(u"stat2")
-        self.stat2.setStyleSheet(u"QFrame { background-color: #1f2335; border-radius: 8px; padding: 12px; }")
-        self.vboxLayout1 = QVBoxLayout(self.stat2)
-        self.vboxLayout1.setObjectName(u"vboxLayout1")
-        self.lblTraffic = QLabel(self.stat2)
-        self.lblTraffic.setObjectName(u"lblTraffic")
-
-        self.vboxLayout1.addWidget(self.lblTraffic)
-
-
-        self.statsLayout.addWidget(self.stat2)
-
-        self.stat3 = QFrame(self.mainContentFrame)
-        self.stat3.setObjectName(u"stat3")
-        self.stat3.setStyleSheet(u"QFrame { background-color: #1f2335; border-radius: 8px; padding: 12px; }")
-        self.vboxLayout2 = QVBoxLayout(self.stat3)
-        self.vboxLayout2.setObjectName(u"vboxLayout2")
-        self.lblSystemHealth = QLabel(self.stat3)
-        self.lblSystemHealth.setObjectName(u"lblSystemHealth")
-
-        self.vboxLayout2.addWidget(self.lblSystemHealth)
+        self.networkCardLayout.addWidget(self.labelNetworkValue)
 
 
-        self.statsLayout.addWidget(self.stat3)
+        self.statsLayout.addWidget(self.cardNetwork)
+
+        self.cardTraffic = QFrame(self.statsFrame)
+        self.cardTraffic.setObjectName(u"cardTraffic")
+        self.cardTraffic.setStyleSheet(u"\n"
+"                  QFrame {\n"
+"                   background-color: rgba(255,255,255,0.05);\n"
+"                   border-radius: 10px;\n"
+"                   padding: 20px;\n"
+"                   border: 1px solid #3b4261;\n"
+"                  }\n"
+"                 ")
+        self.trafficCardLayout = QVBoxLayout(self.cardTraffic)
+        self.trafficCardLayout.setObjectName(u"trafficCardLayout")
+        self.labelTrafficTitle = QLabel(self.cardTraffic)
+        self.labelTrafficTitle.setObjectName(u"labelTrafficTitle")
+
+        self.trafficCardLayout.addWidget(self.labelTrafficTitle)
+
+        self.labelTrafficValue = QLabel(self.cardTraffic)
+        self.labelTrafficValue.setObjectName(u"labelTrafficValue")
+
+        self.trafficCardLayout.addWidget(self.labelTrafficValue)
 
 
-        self.mainContentLayout.addLayout(self.statsLayout)
+        self.statsLayout.addWidget(self.cardTraffic)
 
-        self.graphWidget = QWidget(self.mainContentFrame)
+        self.cardHealth = QFrame(self.statsFrame)
+        self.cardHealth.setObjectName(u"cardHealth")
+        self.cardHealth.setStyleSheet(u"\n"
+"                  QFrame {\n"
+"                   background-color: rgba(255,255,255,0.05);\n"
+"                   border-radius: 10px;\n"
+"                   padding: 20px;\n"
+"                   border: 1px solid #3b4261;\n"
+"                  }\n"
+"                 ")
+        self.healthCardLayout = QVBoxLayout(self.cardHealth)
+        self.healthCardLayout.setObjectName(u"healthCardLayout")
+        self.labelHealthTitle = QLabel(self.cardHealth)
+        self.labelHealthTitle.setObjectName(u"labelHealthTitle")
+
+        self.healthCardLayout.addWidget(self.labelHealthTitle)
+
+        self.labelHealthValue = QLabel(self.cardHealth)
+        self.labelHealthValue.setObjectName(u"labelHealthValue")
+
+        self.healthCardLayout.addWidget(self.labelHealthValue)
+
+
+        self.statsLayout.addWidget(self.cardHealth)
+
+
+        self.dashboardLayout.addWidget(self.statsFrame)
+
+        self.chartFrame = QFrame(self.pageDashboard)
+        self.chartFrame.setObjectName(u"chartFrame")
+        self.chartFrame.setStyleSheet(u"\n"
+"               QFrame {\n"
+"                background-color: #1f2335;\n"
+"                border-radius: 10px;\n"
+"                padding: 20px;\n"
+"                border: 1px solid #3b4261;\n"
+"               }\n"
+"               QLabel { color: #9aa5ce; }\n"
+"              ")
+        self.chartLayout = QVBoxLayout(self.chartFrame)
+        self.chartLayout.setObjectName(u"chartLayout")
+        self.chartTitle = QLabel(self.chartFrame)
+        self.chartTitle.setObjectName(u"chartTitle")
+
+        self.chartLayout.addWidget(self.chartTitle)
+
+        self.graphWidget = QWidget(self.chartFrame)
         self.graphWidget.setObjectName(u"graphWidget")
         self.graphWidget.setMinimumSize(QSize(400, 250))
-        self.graphWidget.setStyleSheet(u"\n"
-"           QWidget {\n"
-"            background-color: #1f2335;\n"
-"            border-radius: 8px;\n"
-"            border: 1px solid #3b4261;\n"
-"           }\n"
-"          ")
-        self.graphLayout = QVBoxLayout(self.graphWidget)
-        self.graphLayout.setObjectName(u"graphLayout")
-        self.graphLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.mainContentLayout.addWidget(self.graphWidget)
+        self.chartLayout.addWidget(self.graphWidget)
 
-        self.widget = QWidget(self.mainContentFrame)
-        self.widget.setObjectName(u"widget")
 
-        self.mainContentLayout.addWidget(self.widget)
+        self.dashboardLayout.addWidget(self.chartFrame)
 
-        self.statusLabel = QLabel(self.mainContentFrame)
-        self.statusLabel.setObjectName(u"statusLabel")
+        self.stackedWidget.addWidget(self.pageDashboard)
+        self.pageNotifications = QWidget()
+        self.pageNotifications.setObjectName(u"pageNotifications")
+        self.notifLayout = QVBoxLayout(self.pageNotifications)
+        self.notifLayout.setObjectName(u"notifLayout")
+        self.labelNotif = QLabel(self.pageNotifications)
+        self.labelNotif.setObjectName(u"labelNotif")
 
-        self.mainContentLayout.addWidget(self.statusLabel)
+        self.notifLayout.addWidget(self.labelNotif)
+
+        self.stackedWidget.addWidget(self.pageNotifications)
+        self.pageNetwork = QWidget()
+        self.pageNetwork.setObjectName(u"pageNetwork")
+        self.networkLayout = QVBoxLayout(self.pageNetwork)
+        self.networkLayout.setObjectName(u"networkLayout")
+        self.labelNetwork = QLabel(self.pageNetwork)
+        self.labelNetwork.setObjectName(u"labelNetwork")
+
+        self.networkLayout.addWidget(self.labelNetwork)
+
+        self.stackedWidget.addWidget(self.pageNetwork)
+        self.pageControls = QWidget()
+        self.pageControls.setObjectName(u"pageControls")
+        self.controlsLayout = QVBoxLayout(self.pageControls)
+        self.controlsLayout.setObjectName(u"controlsLayout")
+        self.labelControls = QLabel(self.pageControls)
+        self.labelControls.setObjectName(u"labelControls")
+
+        self.controlsLayout.addWidget(self.labelControls)
+
+        self.stackedWidget.addWidget(self.pageControls)
+        self.pageRules = QWidget()
+        self.pageRules.setObjectName(u"pageRules")
+        self.rulesLayout = QVBoxLayout(self.pageRules)
+        self.rulesLayout.setObjectName(u"rulesLayout")
+        self.labelRules = QLabel(self.pageRules)
+        self.labelRules.setObjectName(u"labelRules")
+
+        self.rulesLayout.addWidget(self.labelRules)
+
+        self.stackedWidget.addWidget(self.pageRules)
+        self.pageReports = QWidget()
+        self.pageReports.setObjectName(u"pageReports")
+        self.reportsLayout = QVBoxLayout(self.pageReports)
+        self.reportsLayout.setObjectName(u"reportsLayout")
+        self.labelReports = QLabel(self.pageReports)
+        self.labelReports.setObjectName(u"labelReports")
+
+        self.reportsLayout.addWidget(self.labelReports)
+
+        self.stackedWidget.addWidget(self.pageReports)
+        self.pageSettings = QWidget()
+        self.pageSettings.setObjectName(u"pageSettings")
+        self.settingsLayout = QVBoxLayout(self.pageSettings)
+        self.settingsLayout.setObjectName(u"settingsLayout")
+        self.labelSettings = QLabel(self.pageSettings)
+        self.labelSettings.setObjectName(u"labelSettings")
+
+        self.settingsLayout.addWidget(self.labelSettings)
+
+        self.stackedWidget.addWidget(self.pageSettings)
+
+        self.mainContentLayout.addWidget(self.stackedWidget)
 
 
         self.mainLayout.addWidget(self.mainContentFrame)
@@ -247,7 +356,6 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1200, 20))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -259,20 +367,29 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Zeek IPS/IDS Dashboard", None))
-        self.menuTitle.setText(QCoreApplication.translate("MainWindow", u" VEIL Dashboard", None))
-        self.btnDashboard.setText(QCoreApplication.translate("MainWindow", u" Dashboard", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Veil IPS/IDS Dashboard", None))
+        self.menuTitle.setText(QCoreApplication.translate("MainWindow", u"VEIL Dashboard", None))
+        self.btnDashboard.setText(QCoreApplication.translate("MainWindow", u"Dashboard", None))
         self.btnNotifications.setText(QCoreApplication.translate("MainWindow", u"Notifications", None))
         self.btnNetwork.setText(QCoreApplication.translate("MainWindow", u"Network Traffic", None))
-        self.btnControls.setText(QCoreApplication.translate("MainWindow", u" Prevention & Response", None))
+        self.btnControls.setText(QCoreApplication.translate("MainWindow", u"Prevention & Response", None))
         self.btnRules.setText(QCoreApplication.translate("MainWindow", u"Rules Management", None))
         self.btnReports.setText(QCoreApplication.translate("MainWindow", u"Report Analytics", None))
-        self.btnSettings.setText(QCoreApplication.translate("MainWindow", u"\u2699 Settings", None))
-        self.headerTitle.setText(QCoreApplication.translate("MainWindow", u"Network Overview", None))
-        self.refreshButton.setText(QCoreApplication.translate("MainWindow", u"\u27f3 Refresh", None))
-        self.lblNetworkStatus.setText(QCoreApplication.translate("MainWindow", u"Network Status: Stable", None))
-        self.lblTraffic.setText(QCoreApplication.translate("MainWindow", u" Real-Time Traffic: Active", None))
-        self.lblSystemHealth.setText(QCoreApplication.translate("MainWindow", u"System Health: Good", None))
-        self.statusLabel.setText(QCoreApplication.translate("MainWindow", u"Status: Ready", None))
+        self.btnSettings.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
+        self.headerTitle.setText(QCoreApplication.translate("MainWindow", u"Dashboard Overview", None))
+        self.refreshButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
+        self.labelNetworkTitle.setText(QCoreApplication.translate("MainWindow", u"Network Status", None))
+        self.labelNetworkValue.setText(QCoreApplication.translate("MainWindow", u"Stable", None))
+        self.labelTrafficTitle.setText(QCoreApplication.translate("MainWindow", u"Traffic Load", None))
+        self.labelTrafficValue.setText(QCoreApplication.translate("MainWindow", u"245 Mbps", None))
+        self.labelHealthTitle.setText(QCoreApplication.translate("MainWindow", u"System Health", None))
+        self.labelHealthValue.setText(QCoreApplication.translate("MainWindow", u"Good", None))
+        self.chartTitle.setText(QCoreApplication.translate("MainWindow", u"Network Activity (Last 24 Hours)", None))
+        self.labelNotif.setText(QCoreApplication.translate("MainWindow", u"Notifications content goes here.", None))
+        self.labelNetwork.setText(QCoreApplication.translate("MainWindow", u"Network Traffic Analysis content here.", None))
+        self.labelControls.setText(QCoreApplication.translate("MainWindow", u"Prevention & Response content here.", None))
+        self.labelRules.setText(QCoreApplication.translate("MainWindow", u"Rules Management content here.", None))
+        self.labelReports.setText(QCoreApplication.translate("MainWindow", u"Report Analytics content here.", None))
+        self.labelSettings.setText(QCoreApplication.translate("MainWindow", u"Settings content here.", None))
     # retranslateUi
 
